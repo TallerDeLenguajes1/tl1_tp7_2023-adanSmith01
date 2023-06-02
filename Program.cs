@@ -3,7 +3,7 @@
 Calculadora calcu = new();
 
 string operadores, num = String.Empty, op_act, op_ant = String.Empty;
-operadores = @"+-*/C=O"; // Operadores válidos
+operadores = @"+*-/C=O"; // Operadores válidos
 double a;
 bool prendido = true, cambiarInter = false;
 
@@ -73,6 +73,7 @@ do{
             }
         }
     } else{
+        // Se activa en el caso de mostrar el resultado luego de las operaciones sucesivas
         Console.Write("Op ( +, -, *, /, C, =, APAGAR(O) ): ");
         op_act = Console.ReadLine();
 
