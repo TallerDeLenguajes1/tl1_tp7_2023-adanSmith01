@@ -1,127 +1,58 @@
-﻿using spaceCalc;
-// Objeto tipo calculadora
-Calculadora calcu = new();
+﻿using adminEmpresa;
 
-string operadores, num = String.Empty, op_act, op_ant = String.Empty;
-operadores = @"+*-/C=O"; // Operadores válidos
-double a;
-bool prendido = true, cambiarInter = false;
+Empleado[] empleados = new Empleado[3];
 
-do{
-    if(!cambiarInter){
-        Console.Write("\nNum: ");
-        num = Console.ReadLine();
-        Console.Write("Op ( +, -, *, /, C, =, APAGAR(O) ): ");
-        op_act = Console.ReadLine();
+double montoTotal = 0d;
 
-        if(!double.TryParse(num, out a) || !operadores.Contains(op_act)){
-            Console.WriteLine("\nSyntax error\n");
-        } else{
-            if(op_ant == "/" && a == 0){
-                Console.WriteLine("\nERROR. No se puede dividir por cero\n");
-                calcu.Limpiar();
-                op_ant = String.Empty;
-            } else{
-                if(String.IsNullOrEmpty(op_ant)){
-                    calcu.Sumar(a);
-            
-                    if(op_act == "*"){
-                        calcu.Multiplicar(1);
-                    } else{
-                        if(op_act == "/"){
-                            calcu.Dividir(1);
-                        }
-                    }
+// Datos del empleado 1
+empleados[0] = new Empleado();
+empleados[0].Apellido = "Perez";
+empleados[0].Nombre = "Rosa";
+empleados[0].FechaNac = new DateTime(1970, 2, 1);
+empleados[0].EstadoCivil = 'S';
+empleados[0].Genero = 'F';
+empleados[0].FechaIngreso = new DateTime(2001, 5, 8);
+empleados[0].SueldoBasico = 23000d;
+empleados[0].Cargo = Cargos.Especialista;
 
-                    op_ant = op_act;
-                    
-                } else{
-                    switch(op_ant){
-                        case "+":
-                        calcu.Sumar(a);
-                        break;
-                        case "-":
-                        calcu.Restar(a);
-                        break;
-                        case "*":
-                        calcu.Multiplicar(a);
-                        break;
-                        case "/":
-                        calcu.Dividir(a);
-                        break;
-                    }
+empleados[1] = new Empleado();
+empleados[1].Apellido = "Gomez";
+empleados[1].Nombre = "Rafael";
+empleados[1].FechaNac = new DateTime(1967, 2, 1);
+empleados[1].EstadoCivil = 'C';
+empleados[1].Genero = 'M';
+empleados[1].FechaIngreso = new DateTime(2008, 4, 9);
+empleados[1].SueldoBasico = 65000d;
+empleados[1].Cargo = Cargos.Especialista;
 
-                }
+empleados[2] = new Empleado();
+empleados[2].Apellido = "Menendez";
+empleados[2].Nombre = "Gabriela";
+empleados[2].FechaNac = new DateTime(1968, 2, 1);
+empleados[2].EstadoCivil = 'S';
+empleados[2].Genero = 'F';
+empleados[2].FechaIngreso = new DateTime(2002, 10, 10);
+empleados[2].SueldoBasico = 14000d;
+empleados[2].Cargo = Cargos.Auxiliar;
 
-                if(op_act == "O"){
-                    prendido = false;
-                } else{
-                    if(op_act == "C" || op_act == "c"){
-                        calcu.Limpiar();
-                        op_ant = String.Empty;
-                    } else{
-                        if(op_act == "="){
-                            Console.WriteLine($"\nANS: {calcu.Resultado}\n");
-                            cambiarInter = true;
-                        } else{
-                            op_ant = op_act;
-                        }
-                    }
+foreach (Empleado emp in empleados){
+    montoTotal += emp.Salario();
+}
 
-                }
+Console.WriteLine($"MONTO TOTAL A PAGAR EN CONCEPTO DE SALARIOS: {montoTotal.ToString("N0")}\n");
+empleadoProximoJubilacion(empleados);
 
-            }
-        }
-    } else{
-        // Se activa en el caso de mostrar el resultado luego de las operaciones sucesivas
-        Console.Write("Op ( +, -, *, /, C, =, APAGAR(O) ): ");
-        op_act = Console.ReadLine();
-
-        if(op_act != "=" && op_act != "C" && op_act != "O"){
-            Console.Write("\nNum: ");
-            num = Console.ReadLine();
-            if(!double.TryParse(num, out a) || !operadores.Contains(op_act)){
-                Console.WriteLine("\nSyntax error\n");
-            } else{
-                switch(op_act){
-                    case "+":
-                    calcu.Sumar(a);
-                    break;
-                    case "-":
-                    calcu.Restar(a);
-                    break;
-                    case "*":
-                    calcu.Multiplicar(a);
-                    break;
-                    case "/":
-                    if(a != 0){
-                        calcu.Dividir(a);
-                    } else{
-                        Console.WriteLine("\nERROR. No se puede dividir por cero\n");
-                        calcu.Limpiar();
-                        op_ant = String.Empty;
-                        cambiarInter = false;
-                    }
-                    break;
-                }
-            }
-
-        } else{
-            if(op_act == "="){
-                Console.WriteLine($"\nANS: {calcu.Resultado}\n");
-            } else{
-                if(op_act == "C"){
-                    calcu.Limpiar();
-                    cambiarInter = false;
-                    op_ant = String.Empty;
-                } else{
-                    if(op_act == "O"){
-                        prendido = false;
-                    }
-                }
-            }
+Console.WriteLine("\n################ EMPLEADO PRÓXIMO A JUBILARSE ################\n");
+void empleadoProximoJubilacion(Empleado[] empleados){
+    int prox = int.MaxValue;
+    int j = 0;
+    
+    for(int i = 0; i < empleados.Count(); i++){
+        if(empleados[i].AniosJubilacion() <= prox){
+            prox = empleados[i].AniosJubilacion();
+            j = i;
         }
     }
 
-}while(prendido);
-
+    empleados[j].MostrarDatos();
+}
