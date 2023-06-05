@@ -44,30 +44,18 @@ public class Empleado{
         }
     }
 
+    private double adicional(){
+        double adi = 0d;
+
+        if(Antiguedad() < 20) adi = sueldoBasico*(Antiguedad() / 100d);
+        if(cargo == Cargos.Ingeniero || cargo == Cargos.Especialista) adi *= 1.5d;
+        if(estadoCivil == 'C') adi += 15000d;
+
+        return adi;
+    }
+
     public double Salario(){
-        double adicional;
-        Cargos cargo1 = Cargos.Ingeniero;
-        Cargos cargo2 = Cargos.Especialista;
-
-        if(Antiguedad() < 20){
-            adicional = sueldoBasico*(Antiguedad() / 100d);
-        } else{
-            adicional = sueldoBasico*0.25d;
-        }
-        
-        if(cargo == cargo1 || cargo == cargo2){
-            adicional *= 1.5d;
-        } else{
-            adicional += 0;
-        }
-
-        if(estadoCivil == 'C'){
-            adicional += 15000d;
-        } else{
-            adicional += 0;
-        }
-
-        return (sueldoBasico + adicional);
+        return (sueldoBasico + adicional());
     }
 
     public void MostrarDatos(){
